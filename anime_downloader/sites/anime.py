@@ -343,13 +343,13 @@ class AnimeEpisode:
             try:
                 self.get_data()
             except NotFoundError:
-                raise NotFoundError("No episode sources found.")
+                raise NotFoundError("No episode sources found. source()")
         try:
             sitename, url = self._sources[index]
         except TypeError:
             return self._sources[index]
         except IndexError:
-            raise NotFoundError("No episode sources found.")
+            raise NotFoundError("No episode sources found. sources[index]")
 
         ext = get_extractor(sitename)(url, quality=self.quality)
         self._sources[index] = ext
@@ -361,7 +361,7 @@ class AnimeEpisode:
             self._sources = self._get_sources()
             logger.debug('Sources : '.format(self._sources))
         except NotFoundError:
-            raise NotFoundError("No episode sources found.")
+            raise NotFoundError("No episode sources found. get_data()")
 
     def _get_sources(self):
         raise NotImplementedError
