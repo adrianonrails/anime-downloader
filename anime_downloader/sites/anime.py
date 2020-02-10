@@ -286,7 +286,11 @@ class AnimeEpisode:
         logger.debug("Extracting stream info of id: {}".format(self.url))
 
         def try_data():
-            self.get_data()
+            try:
+                self.get_data()
+            except NotFoundError:
+                logger.warning(f'Skipping episode: {self.ep_no}')
+                pass
             # Just to verify the source is acquired
             self.source().stream_url
         try:
@@ -332,7 +336,10 @@ class AnimeEpisode:
             Extractor depending on the source.
         """
         if not self._sources:
-            self.get_data()
+            try:
+                self.get_data()
+            except NotFoundError:
+                pass
         try:
             sitename, url = self._sources[index]
         except TypeError:
@@ -346,8 +353,11 @@ class AnimeEpisode:
         return ext
 
     def get_data(self):
-        self._sources = self._get_sources()
-        logger.debug('Sources : '.format(self._sources))
+        try:
+            self._sources = self._get_sources()
+            logger.debug('Sources : '.format(self._sources))
+        except NotFoundError:
+            pass
 
     def _get_sources(self):
         raise NotImplementedError
