@@ -106,25 +106,28 @@ def command(ctx, anime_url, episode_range, url, player, skip_download, quality,
         logger.info('Downloading to {}'.format(os.path.abspath(download_dir)))
 
     for episode in animes:
-        if url:
-            util.print_episodeurl(episode)
+        try:
+            if url:
+                util.print_episodeurl(episode)
 
-        if player:
-            util.play_episode(episode, player=player)
+            if player:
+                util.play_episode(episode, player=player)
 
-        if not skip_download:
-            if external_downloader:
-                logging.info('Downloading episode {} of {}'.format(
-                    episode.ep_no, anime.title)
-                )
-                util.external_download(external_downloader, episode,
-                                       file_format, path=download_dir)
-                continue
-            if chunk_size is not None:
-                chunk_size *= 1e6
-                chunk_size = int(chunk_size)
-            episode.download(force=force_download,
-                             path=download_dir,
-                             format=file_format,
-                             range_size=chunk_size)
-            print()
+            if not skip_download:
+                if external_downloader:
+                    logging.info('Downloading episode {} of {}'.format(
+                        episode.ep_no, anime.title)
+                    )
+                    util.external_download(external_downloader, episode,
+                                        file_format, path=download_dir)
+                    continue
+                if chunk_size is not None:
+                    chunk_size *= 1e6
+                    chunk_size = int(chunk_size)
+                episode.download(force=force_download,
+                                path=download_dir,
+                                format=file_format,
+                                range_size=chunk_size)
+                print()
+        except:
+            pass
