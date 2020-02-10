@@ -16,6 +16,7 @@ from tabulate import tabulate
 from anime_downloader import session
 from anime_downloader.sites import get_anime_class
 from anime_downloader.const import desktop_headers
+from anime_downloader.sites.exceptions import NotFoundError
 
 logger = logging.getLogger(__name__)
 
@@ -145,7 +146,11 @@ def print_episodeurl(episode):
     #    print(episode.source().stream_url + "?referer=" +  episode.source().referer)
     # else:
     # Currently I don't know of a way to specify referer in url itself so leaving it here.
-    print(episode.source().stream_url)
+    try:
+        print(episode.source().stream_url)
+    except NotFoundError:
+        logger.info('cannot print stream url')
+        pass
 
 
 def download_episode(episode, **kwargs):
