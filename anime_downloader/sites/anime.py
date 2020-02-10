@@ -290,7 +290,7 @@ class AnimeEpisode:
                 self.get_data()
             except NotFoundError:
                 logger.warning(f'Skipping episode: {self.ep_no}')
-                pass
+                raise NotFoundError("Episode URL not found.")
             # Just to verify the source is acquired
             self.source().stream_url
         try:
@@ -339,7 +339,7 @@ class AnimeEpisode:
             try:
                 self.get_data()
             except NotFoundError:
-                pass
+                raise NotFoundError("No episode sources found.")
         try:
             sitename, url = self._sources[index]
         except TypeError:
@@ -357,7 +357,7 @@ class AnimeEpisode:
             self._sources = self._get_sources()
             logger.debug('Sources : '.format(self._sources))
         except NotFoundError:
-            pass
+            raise NotFoundError("No episode sources found.")
 
     def _get_sources(self):
         raise NotImplementedError
