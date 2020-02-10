@@ -292,7 +292,11 @@ class AnimeEpisode:
                 logger.warning(f'Skipping episode: {self.ep_no}')
                 raise NotFoundError("Episode URL not found.")
             # Just to verify the source is acquired
-            self.source().stream_url
+            try:
+                self.source().stream_url
+            except NotFoundError:
+                raise NotFoundError("Episode URL not found.")
+
         try:
             try_data()
         except NotFoundError:
