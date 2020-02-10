@@ -393,10 +393,12 @@ class AnimeEpisode:
             path = os.path.join(path, file_name)
 
         Downloader = get_downloader('http')
-        downloader = Downloader(self.source(),
-                                path, force, range_size=range_size)
-
-        downloader.download()
+        try:
+            downloader = Downloader(self.source(),
+                                    path, force, range_size=range_size)
+            downloader.download()
+        except NotFoundError:
+            raise NotFoundError("Cannot retrieve source")
 
 
 class SearchResult:
